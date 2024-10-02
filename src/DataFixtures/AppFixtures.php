@@ -6,6 +6,9 @@ use App\Entity\Comment;
 use App\Entity\Episode;
 use App\Entity\Media;
 use App\Entity\Movie;
+use App\Entity\Playlist;
+use App\Entity\PlaylistMedia;
+use App\Entity\PlaylistSubscription;
 use App\Entity\Season;
 use App\Entity\Serie;
 use App\Entity\Subscription;
@@ -88,15 +91,46 @@ class AppFixtures extends Fixture
             $this->createComments($movie, $manager, $faker, $users);
         }
 
+        // Ajout des fixtures pour Playlist, PlaylistSubscription, et PlaylistMedia
+        for ($i = 0; $i < 5; $i++) {
+            $playlist = new Playlist();
+            $playlist->setCreatedAt(new \DateTimeImmutable())
+                ->setUpdatedAt(new \DateTimeImmutable())
+                ->setName($faker->sentence())
+                ->setUser($faker->randomElement($users));
+
+            $manager->persist($playlist);
+
+            for ($j = 0; $j < $faker->numberBetween(1, 3); $j++) {
+                $playlistSubscription = new PlaylistSubscription();
+                $playlistSubscription->setSubscribedAt(new \DateTimeImmutable())
+                    ->setPurchased($faker->randomElement($users))
+                    ->setPlaylist($playlist);
+
+                $manager->persist($playlistSubscription);
+            }
+
+            for ($k = 0; $k < $faker->numberBetween(1, 5); $k++) {
+                $playlistMedia = new PlaylistMedia();
+                $playlistMedia->setPlaylist($playlist)
+                    ->setMedia($faker->randomElement([$serie, $movie]))
+                    ->setAddedAt(new \DateTimeImmutable()); // Assurez-vous d'initialiser addedAt ici
+
+                $manager->persist($playlistMedia);
+            }
+        }
+
         $manager->flush();
     }
+
     private function createComments($media, ObjectManager $manager, $faker, $users): void
     {
         for ($j = 0; $j < $faker->numberBetween(2, 5); $j++) {
             $comment = new Comment();
             $comment->setTexte($faker->paragraph())
                 ->setStatus($faker->randomElement(CommentStatusEnum::cases()))
-                ->setMedia($media);
+                ->setMedia($media)
+                ->setPublisher($faker->randomElement($users)); // Assurez-vous de définir le publisher ici
 
             $manager->persist($comment);
 
@@ -105,7 +139,8 @@ class AppFixtures extends Fixture
                 $childComment->setTexte($faker->paragraph())
                     ->setStatus($faker->randomElement(CommentStatusEnum::cases()))
                     ->setParentComment($comment)
-                    ->setMedia($media);
+                    ->setMedia($media)
+                    ->setPublisher($faker->randomElement($users)); // Assurez-vous de définir le publisher ici
 
                 $manager->persist($childComment);
             }
