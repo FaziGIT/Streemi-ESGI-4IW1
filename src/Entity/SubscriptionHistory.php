@@ -26,7 +26,7 @@ class SubscriptionHistory
     #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
     private ?User $publisher = null;
 
-    public function getId(): ?in
+    public function getId(): ?int
     {
         return $this->id;
     }

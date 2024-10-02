@@ -27,6 +27,7 @@ class Season
     #[ORM\ManyToOne(inversedBy: 'seasons')]
     private ?Serie $serie = null;
 
+
     public function __construct()
     {
         $this->episodes = new ArrayCollection();

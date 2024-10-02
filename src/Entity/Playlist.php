@@ -36,6 +36,9 @@ class Playlist
     #[ORM\OneToMany(targetEntity: PlaylistMedia::class, mappedBy: 'playlist')]
     private Collection $playlistMedia;
 
+    #[ORM\ManyToOne(inversedBy: 'playlist')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->playlistSubscriptions = new ArrayCollection();
@@ -139,6 +142,18 @@ class Playlist
                 $playlistMedium->setPlaylist(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
