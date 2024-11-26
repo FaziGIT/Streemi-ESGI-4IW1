@@ -40,4 +40,19 @@ class MediaRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-}
+
+    public function findRandomMediaOptimized(int $max): array
+    {
+        $totalMedia = $this->createQueryBuilder('m')
+            ->select('COUNT(m.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $randomOffset = mt_rand(0, max(0, $totalMedia - $max));
+
+        return $this->createQueryBuilder('m')
+            ->setFirstResult($randomOffset)
+            ->setMaxResults($max)
+            ->getQuery()
+            ->getResult();
+    }}
