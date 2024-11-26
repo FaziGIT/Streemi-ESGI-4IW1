@@ -1,0 +1,12 @@
+App\Entity\Subscription:
+  subscription{1..25}:
+    price: "<numberBetween(1, 50)>"
+    name: "<sentence(1, true)>"
+    duration: "<numberBetween(1, 12)>"
+
+App\Entity\SubscriptionHistory:
+  subscriptionHistory{1..25}:
+    startDate: "<datetime()>"
+    endDate: "<datetime()>"
+    subscription: '@subscription<numberBetween(1, 25)>'
+    publisher: '@user*'

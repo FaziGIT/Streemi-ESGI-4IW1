@@ -21,7 +21,7 @@ class Comment
     private ?string $texte = null;
 
     #[ORM\Column(enumType: CommentStatusEnum::class)]
-    private ?CommentStatusEnum $status = null;
+    private ?CommentStatusEnum $status = CommentStatusEnum::PUBLIC;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'childComments')]
     private ?self $parentComment = null;

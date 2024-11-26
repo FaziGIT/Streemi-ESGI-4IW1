@@ -1,0 +1,6 @@
+App\Entity\WatchHistory:
+  watchHistory{1..25}:
+    lastWatched: "<datetime()>"
+    numberOfViews: "<numberBetween(1, 100)>"
+    publisher: "@user*"
+    media: "@movie*"

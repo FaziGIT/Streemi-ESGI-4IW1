@@ -1,0 +1,25 @@
+App\Entity\Playlist:
+  playlist{1..50}:
+    createdAt: "<datetime()>"
+    updatedAt: "<datetime()>"
+    name: "Playlist <current()> - <name()>"
+    user: '@user*'
+
+App\Entity\PlaylistMedia:
+  playlistMediaMovie{1..25}:
+    addedAt: "<datetime()>"
+    media: '@movie*'
+    playlist: '@playlist<numberBetween(1, 50)>'
+
+  playlistMediaSerie{1..25}:
+    addedAt: "<datetime()>"
+    media: '@serie*'
+    playlist: '@playlist<numberBetween(1, 50)>'
+
+
+App\Entity\PlaylistSubscription:
+  playlistSubscription{1..50}:
+    subscribedAt: "<datetime()>"
+    purchased: '@user*'
+    playlist: '@playlist<numberBetween(1, 50)>'
+

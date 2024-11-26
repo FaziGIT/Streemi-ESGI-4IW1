@@ -1,0 +1,10 @@
+App\Entity\Comment:
+  comment_movie{1..50}: # Identifiant unique pour les commentaires liés à des films
+    texte: "Comment <current()> - <name()>"
+    publisher: "@user*"
+    media: "@movie*"
+
+  comment_serie{1..50}: # Identifiant unique pour les commentaires liés à des séries
+    texte: "Comment <current()> - <name()>"
+    publisher: "@user*"
+    media: "@serie*"
