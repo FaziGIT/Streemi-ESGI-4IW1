@@ -17,8 +17,14 @@ final class PlaylistController extends AbstractController
     #[Route(name: 'app_playlist_index', methods: ['GET'])]
     public function index(PlaylistRepository $playlistRepository): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        $playlists = $playlistRepository->findBy(['user' => $this->getUser()]);
+
         return $this->render('playlist/index.html.twig', [
-            'playlists' => $playlistRepository->findAll(),
+            'playlists' => $playlists,
         ]);
     }
 
@@ -71,7 +77,7 @@ final class PlaylistController extends AbstractController
     #[Route('/{id}', name: 'app_playlist_delete', methods: ['POST'])]
     public function delete(Request $request, Playlist $playlist, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$playlist->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $playlist->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($playlist);
             $entityManager->flush();
         }
